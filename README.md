@@ -1,10 +1,10 @@
-# Wordament Solver App
+# Wordament Solver App with GUI
 Description:
 
 This Wordament Solver app allows users to input a 4x4 board of letters and find valid words from the board based on a provided dictionary.
 
 Features:
-
+- Cross-platform (Built on Linux, runs on Windows 11. No DPI awareness on POSIX.)
 - Input a 4x4 board of letters
 - Solve the Wordament board to find valid words
 - Sorted return based on length
@@ -20,6 +20,8 @@ Installation:
 
 
 ### Contributing
+
+Working on making it prettier, but CTk looks pretty good out-of-box.
 
 Feel free to contribute.
 
