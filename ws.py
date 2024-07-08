@@ -132,7 +132,7 @@ class WordamentSolverApp(ctk.CTk):
     
     def create_widgets(self):
         # Board input frame
-        self.board_frame = ctk.CTkFrame(self, fg_color="transparent")
+        self.board_frame = ctk.CTkFrame(self, bg_color="transparent")
         self.board_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
         # Configure grid of the board_frame
         for i in range(4):
@@ -169,12 +169,12 @@ class WordamentSolverApp(ctk.CTk):
 
         # Solve button
         self.solve_button = ctk.CTkButton(self.button_frame, text="Solve", command=self.solve_board)
-        self.solve_button.grid(row=0, column=1, padx=(3, 0), pady=15, sticky="we")
+        self.solve_button.grid(row=0, column=1, padx=(3, 0), pady=10, sticky="we")
 
         self.results_text = ctk.CTkTextbox(self, width=310, height=450, border_width=1, corner_radius=3)
         
         self.results_text.insert(index="end", text="                                 Results will be shown here")
-        self.results_text.grid(row=2, column=0, padx=12, pady=(0, 14), sticky="nsew")
+        self.results_text.grid(row=2, column=0, padx=12, pady=(0, 10), sticky="nsew")
         self.results_text.configure(state="disabled")
     def error_message(self):
         CTkMessagebox(title="Error", message="   All tiles must be filled", icon="warning", justify="center", font=("Arial", 14),  button_height=30, button_width=90, icon_size=(30, 30))
