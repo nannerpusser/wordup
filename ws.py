@@ -104,6 +104,20 @@ def CenterWindowToDisplay(Screen: ctk.CTk, width: int, height: int, scale_factor
     y = int(((screen_height/2) - (height/2)) * scale_factor)
     return f"{width}x{height}+{x}+{y}"
 
+'''
+Will update UI with proper instructions.  Enter special tiles like "EN-" or "J/K" or "HE" just like they are shown on the tile and below.
+
+Enter your board as laid out in the UI: left to right, top to bottom. The (bad basic) error checking will prevent ValueError breaking 
+and strip bad entries like empty spaces, digits and invalid special characters, but it will still take up to 4 valid characters per entry and run it up the Trie, even if
+it's "AAAA" or something completely outside the legal tile set, but valid per the current entry widget rules.
+
+Example Board entry:
+
+[P] [M] [T] [E]
+[-LY] [A] [L] [A/R]
+[I] [MIS-] [S] [F]
+
+''''
     
 class WordamentSolverApp(ctk.CTk):      
     def __init__(self):
