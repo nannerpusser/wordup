@@ -1,9 +1,11 @@
 import customtkinter as ctk
 from tkinter import ttk
 import threading
+from PIL import Image, ImageTk
 import os
 from CTkMessagebox import CTkMessagebox
 
+assets = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets")
 class TrieNode:
     def __init__(self):
         self.children = {}
@@ -104,34 +106,39 @@ def CenterWindowToDisplay(Screen: ctk.CTk, width: int, height: int, scale_factor
     y = int(((screen_height/2) - (height/2)) * scale_factor)
     return f"{width}x{height}+{x}+{y}"
 
-'''
-Will update UI with proper instructions.  Enter special tiles like "EN-" or "J/K" or "HE" just like they are shown on the tile and below.
+class TopWindow(ctk.CTkToplevel):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.geometry(CenterWindowToDisplay(self, 200, 400, self._get_window_scaling()))
+        self.resizable(False, False)
+        self.minsize(200, 400)
+        self.title("Help")
+        self.focus_force()
 
-Enter your board as laid out in the UI: left to right, top to bottom. The (bad basic) error checking will prevent ValueError breaking 
-and strip bad entries like empty spaces, digits and invalid special characters, but it will still take up to 4 valid characters per entry and run it up the Trie, even if
-it's "AAAA" or something completely outside the legal tile set, but valid per the current entry widget rules.
-
-Example Board entry:
-
-[P] [M] [T] [E]
-[-LY] [A] [L] [A/R]
-[I] [MIS-] [S] [F]
-
-''''
-    
+        self.help_text = ctk.CTkTextbox(self, width=200, height=400, border_width=1, corner_radius=3, bg_color="#2b2b2b")
+        self.help_text.insert(index="end", text="Help text will be shown here")
+        self.help_text.configure(state="disabled")
+        self.help_text.pack()
 class WordamentSolverApp(ctk.CTk):      
     def __init__(self):
         super().__init__()
 
+        self.entryfont = (os.path.join(assets + "Segoe-Sans-Text.ttf"), 22)
+        icon_size = 40
+        icon_path = os.path.join(assets, "helpimg.png")
+        icon_image = Image.open(icon_path)
+        self.iconphoto = ImageTk.PhotoImage(icon_image.resize((icon_size, icon_size)))
+
+        
         style = ttk.Style()
         style.theme_use("clam")
         style.configure("Treeview", foreground="#ffffff", background="#2b2b2b", fieldbackground="#2b2b2b")
         style.map("Treeview", background=[("selected", "#2b2b2b")])
 
         self.title("Wordament Solver")
-        self.geometry(CenterWindowToDisplay(self, 400, 700, self._get_window_scaling()))
+        self.geometry(CenterWindowToDisplay(self, 375, 700, self._get_window_scaling()))
         self.resizable(False, False)
-        self.minsize(400, 700)
+        self.minsize(375, 700)
         
         self.bg_color = "#2b2b2b"  
         self.configure(fg_color=self.bg_color)
@@ -150,7 +157,7 @@ class WordamentSolverApp(ctk.CTk):
         self.board_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
         # Configure grid of the board_frame
         for i in range(4):
-            self.board_frame.grid_columnconfigure(i, weight=1)
+            self.board_frame.grid_columnconfigure(i, weight=1, uniform="both")
             self.board_frame.grid_rowconfigure(i, weight=1)
 
 
@@ -163,37 +170,52 @@ class WordamentSolverApp(ctk.CTk):
             row_entries = []
             for j in range(4):
                 entry = ctk.CTkEntry(self.board_frame, width=51, height=54, 
-                                     font=("Arial", 20), justify="center",
+                                     font=self.entryfont, justify="center",
                                      textvariable=self.entry_vars[i][j])
-                entry.grid(row=i, column=j, padx=10, pady=10, sticky="nsew")
+                entry.grid(row=i, column=j, padx=6, pady=6, sticky="nsew")
                 row_entries.append(entry)
                 # Add trace to StringVar
                 self.entry_vars[i][j].trace_add("write", lambda *_, r=i, c=j: self.validate_entry(r, c))
             self.board_entries.append(row_entries)
 
         # Button frame
-        self.button_frame = ctk.CTkFrame(self)
-        self.button_frame.grid(row=1, column=0, padx=10, pady=(0, 10), sticky="ew")
-        self.button_frame.grid_columnconfigure(0, weight=1)
-        self.button_frame.grid_columnconfigure(1, weight=1)
+        self.button_frame = ctk.CTkFrame(self, fg_color="transparent")
+        self.button_frame.grid(row=1, column=0, padx=10, pady=(0, 10), sticky="nsew")
+        self.button_frame.grid_columnconfigure(0, weight=1, uniform="all")
+        self.button_frame.grid_columnconfigure(1, weight=1, uniform="all")
+        self.button_frame.grid_rowconfigure(2, weight=1)
 
         # Clear button
         self.clear_button = ctk.CTkButton(self.button_frame, text="Clear", command=self.clear_entries, fg_color="#bd2c08", hover_color="#b54124")
         self.clear_button.grid(row=0, column=0, padx=(0, 5), pady=5, sticky="ew")
 
+        # Help button   
+        self.help_button = ctk.CTkButton(self.button_frame, text=" ", command=self.help, fg_color="transparent", bg_color="#2b2b2b", image=self.iconphoto, compound="top", width=22, height=22, hover_color="#2b2b2b")
+        self.help_button.grid(row=0, column=1, padx=2, pady=0, ipadx=0, ipady=0, sticky="ew")
+
         # Solve button
-        self.solve_button = ctk.CTkButton(self.button_frame, text="Solve", command=self.solve_board)
-        self.solve_button.grid(row=0, column=1, padx=(3, 0), pady=10, sticky="we")
+        self.solve_button = ctk.CTkButton(self.button_frame, text="Solve", width=120, command=self.solve_board)
+        self.solve_button.grid(row=0, column=2, padx=(5, 0), pady=5, sticky="we")
 
         self.results_text = ctk.CTkTextbox(self, width=310, height=450, border_width=1, corner_radius=3)
         
         self.results_text.insert(index="end", text="                                 Results will be shown here")
         self.results_text.grid(row=2, column=0, padx=12, pady=(0, 10), sticky="nsew")
         self.results_text.configure(state="disabled")
+
+    topwindow = None
+        
     def error_message(self):
         CTkMessagebox(title="Error", message="   All tiles must be filled", icon="warning", justify="center", font=("Arial", 14),  button_height=30, button_width=90, icon_size=(30, 30))
 
-
+    def help(self):
+        if self.topwindow is None or not self.topwindow.winfo_exists():
+            self.topwindow = TopWindow(self)
+        else:
+            self.topwindow.focus_force()
+        
+        self.solve_button.configure(state="normal", text="Solve")
+    
     def validate_entry(self, row, col):
         value = self.entry_vars[row][col].get()
         # Remove digits and limit to 4 characters
