@@ -1,7 +1,7 @@
 # Wordament Solver App with GUI
 Description:
 
-This Wordament Solver app allows users to input a 4x4 board of letters and find valid words from the board based on a provided dictionary. The dictionary is the standard SOWPODS Scrabble list, commonly found as ``twl06.txt`` I believe. App's a skeleton right now without being fleshed out and properly fully implemented. I added some quick instructions inside the code as a comment if it was necessary for anyone. Will be adding a proper instruction widget in the UI, but it's all pretty straightfoward and the Wordament rules are as simple as it gets.
+This Wordament Solver app allows users to input a 4x4 board of letters and find valid words from the board based on a provided dictionary. The dictionary is the standard SOWPODS Scrabble list, commonly found as ``twl06.txt`` I believe. App's a skeleton right now without being fleshed out and properly fully implemented. I added some quick instructions inside the code as a comment if it was necessary for anyone. Will be adding a proper instruction widget in the UI, but it's all pretty straightfoward and the Wordament rules are as simple as it gets. Added Help Menu class, GUI components.
 
 Features:
 - Cross-platform (Built on Linux, runs on Windows 11. No DPI awareness on linux and no Mac in my realm so can't test it there even if I wanted to.
@@ -14,8 +14,8 @@ Features:
 Installation:
 
 - Clone the repository
-- Install the required dependencies
-``pip install customtkinter`` etc. Pipfile, since I know you use pipenv like all God-fearing Python men do. 
+- Install the required dependencies. Pipfile, since I know you use pipenv like all God-fearing Python men do. 
+``pip install customtkinter`` etc. 
 - Run the ws.py file and please don't laugh.
 
 
