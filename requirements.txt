@@ -1,0 +1,6 @@
+-i https://pypi.org/simple
+ctkmessagebox==2.7; python_version >= '3.6'
+customtkinter==5.2.2; python_version >= '3.7'
+darkdetect==0.8.0; python_version >= '3.6'
+packaging==24.1; python_version >= '3.8'
+pillow==10.4.0; python_version >= '3.8'
