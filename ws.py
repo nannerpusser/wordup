@@ -364,8 +364,8 @@ class WordamentSolverApp(ctk.CTk):
         self.solve_button.configure(state="normal", text="Solve")
 
 
-if os.name == "posix":
-    ctk.deactivate_automatic_dpi_awareness()
+##if os.name == "posix":
+   # ctk.deactivate_automatic_dpi_awareness()
 
 if __name__ == "__main__":
 
