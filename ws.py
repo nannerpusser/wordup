@@ -1,8 +1,7 @@
 import customtkinter as ctk
 from tkinter import ttk
 import threading
-from PIL import Image, ImageTk
-import os
+from PIL import Image
 from CTkMessagebox import CTkMessagebox
 
 assets = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets")
@@ -136,7 +135,7 @@ class TopWindow(ctk.CTkToplevel):
         self.resizable(False, False)
         self.minsize(200, 400)
         self.title("Help")
-        self.focus_force()
+
 
         self.help_text = ctk.CTkTextbox(
             self,
@@ -154,12 +153,13 @@ class TopWindow(ctk.CTkToplevel):
 class WordamentSolverApp(ctk.CTk):
     def __init__(self):
         super().__init__()
-
+        global icon_label, icon_image
+        
         self.entryfont = (os.path.join(assets + "Segoe-Sans-Text.ttf"), 26)
         icon_size = 24
-        icon_path = os.path.join(assets, "helpimg.png")
-        icon_image = Image.open(icon_path)
-        self.iconphoto = ImageTk.PhotoImage(icon_image.resize((icon_size, icon_size)))
+        icon_path = os.path.join(assets, "Info.png")
+        icon_image = ctk.CTkImage(Image.open(icon_path), size=(icon_size, icon_size))
+        icon_label = ctk.CTkLabel(self, text="", image=icon_image)
 
         style = ttk.Style()
         style.theme_use("clam")
@@ -203,7 +203,8 @@ class WordamentSolverApp(ctk.CTk):
             for j in range(4):
                 entry = ctk.CTkEntry(
                     self.board_frame,
-                    height=70,
+                    width=80,
+                    height=80,
                     font=self.entryfont,
                     justify="center",
                     textvariable=self.entry_vars[i][j],
@@ -212,7 +213,7 @@ class WordamentSolverApp(ctk.CTk):
                 row_entries.append(entry)
                 # Add trace to StringVar
                 self.entry_vars[i][j].trace_add(
-                    "write", lambda *_, r=i, c=j: self.validate_entry(r, c)
+                    "write", lambda *args, r=i, c=j: self.validate_entry(r, c)
                 )
             self.board_entries.append(row_entries)
 
@@ -243,9 +244,9 @@ class WordamentSolverApp(ctk.CTk):
             bg_color="#2b2b2b",
             compound="left",
             hover_color="#2b2b2b",
-            image=self.iconphoto,
-            width=22,
-            height=22,
+            image=icon_image,
+            width=24,
+            height=24,
             anchor="center",
         )
         self.help_button.grid(
@@ -287,7 +288,7 @@ class WordamentSolverApp(ctk.CTk):
         if self.topwindow is None or not self.topwindow.winfo_exists():
             self.topwindow = TopWindow(self)
         else:
-            self.topwindow.focus_force()
+            self.topwindow.focus()
 
         self.solve_button.configure(state="normal", text="Solve")
 
@@ -364,8 +365,8 @@ class WordamentSolverApp(ctk.CTk):
         self.solve_button.configure(state="normal", text="Solve")
 
 
-if os.name == "posix":
-    ctk.deactivate_automatic_dpi_awareness()
+##if os.name == "posix":
+   # ctk.deactivate_automatic_dpi_awareness()
 
 if __name__ == "__main__":
 
