@@ -1,6 +1,7 @@
 import customtkinter as ctk
 from tkinter import ttk
 import threading
+import os
 from PIL import Image
 from CTkMessagebox import CTkMessagebox
 
