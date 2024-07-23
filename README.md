@@ -1,4 +1,6 @@
-# Wordament Solver App with GUI
+*Update: Completely reworked app and added word value as filterable treeview display. Of course tile values are not constants all the time and although there are base values, conditions and multipliers apply on a per-game basis. So value is approximate until I actually implement OCR for input automation and can pull values off each tile in real-time.*
+
+## Wordament Solver App with GUI
 Description:
 
 This Wordament Solver app allows users to input a 4x4 board of letters and find valid words from the board based on a provided dictionary. The dictionary is the standard SOWPODS Scrabble list, commonly found as ``twl06.txt``. 
