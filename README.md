@@ -3,7 +3,7 @@
 ## Wordament Solver App with GUI
 Description:
 
-This Wordament Solver app allows users to input a 4x4 board of letters and find valid words from the board based on a provided dictionary. The dictionary is the standard OSPD Scrabble dictionary, commonly found as ``twl06.txt``. This means you will encounter invalid words at times since Wordament has an internal dictionary that is nearly identical, but not quite. If you can gete Microsoft to give it up publicly, you have my thanks.
+This Wordament Solver app allows users to input a 4x4 board of letters and find valid words from the board based on a provided dictionary. The dictionary is the standard OSPD Scrabble dictionary, commonly found as ``twl06.txt``. This means you will encounter invalid words at times since Wordament has an internal dictionary that is nearly identical, but not quite. If you can get Microsoft to share their dictionary, I thank you in advance.
 
 Features:
 - Cross-platform (Linux and Windows). No DPI awareness on linux and depending on your WM, complete disregard for window size constraints. 
