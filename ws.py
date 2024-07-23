@@ -119,8 +119,7 @@ def solve_wordament(board, dictionary_file):
 
 
 def CenterWindowToDisplay(
-    Screen: ctk.CTk, width: int, height: int, scale_factor: float = 1.0
-):
+    Screen: ctk.CTk, width: int, height: int, scale_factor: float = 1.0):
     """Centers the window to the main display/monitor"""
     screen_width = Screen.winfo_screenwidth()
     screen_height = Screen.winfo_screenheight()
@@ -193,7 +192,7 @@ class WordamentSolverApp(ctk.CTk):
         # Configure grid of the board_frame
         for i in range(4):
             self.board_frame.grid_columnconfigure(i, weight=1, uniform="both")
-            self.board_frame.grid_rowconfigure(i, weight=1)
+            self.board_frame.grid_rowconfigure(i, weight=1, uniform="both")
 
         # Create a StringVar for each entry
         self.entry_vars = [[ctk.StringVar() for _ in range(4)] for _ in range(4)]
@@ -342,7 +341,7 @@ class WordamentSolverApp(ctk.CTk):
         self.results_tree.heading("Word", text="Word")
         self.results_tree.heading("Length", text="Length")
         self.results_tree.column("Word", anchor="w")
-        self.results_tree.column("Length", anchor="center", width=100)
+        self.results_tree.column("Length", anchor="e", width=100)
         self.results_tree.grid(row=2, column=0, padx=10, pady=(0, 10), sticky="nsew")
 
         self.tree_scroll = ctk.CTkScrollbar(
