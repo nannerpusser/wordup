@@ -8,10 +8,10 @@ This Wordament Solver app allows users to input a 4x4 board of letters and find 
 Features:
 - Cross-platform (Linux and Windows). No DPI awareness on linux and depending on your WM, complete disregard for window size constraints. 
 - Input a 4x4 board of letters as they appear on the tile.
-- Handles all special tiles: double-letters, either/or tiles, prefix and suffix tiles of each type (**- and ***-, or vice versa). Now with proper either/or handling that doesn't crash!
+- Handles all special tiles: double-letters aka. digrams, either/or tiles, prefix and suffix tiles of each type (**- and ***-, or vice versa). Now with proper either/or handling that doesn't crash!
 - Sorted return, filterable by length or value.
-- Working on adding approx. scoring.
-- Length is a good indicator of score anyway, just like your mom told me.
+- Working on prettier GUI.
+
   
 Installation:
 
