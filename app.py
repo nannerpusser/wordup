@@ -255,9 +255,9 @@ class WordamentGUI:
         self.tree.pack(side=tk.LEFT, expand=True, fill="both")
 
         # Scrollbar for Treeview, had trouble keeping it slim and padded on y axis
-        scrollbar = ctk.CTkScrollbar(tree_frame, orientation="vertical", command=self.tree.yview, border_spacing=1, width=5)
+        scrollbar = ctk.CTkScrollbar(tree_frame, orientation="vertical", command=self.tree.yview, border_spacing=2, width=5)
         self.tree.configure(yscroll=scrollbar.set)
-        scrollbar.pack(side="right", fill="y", ipadx=2)
+        scrollbar.pack(side="right", fill="y", ipadx=4)
 
         # Configure tag for alternating row colors
         self.tree.tag_configure('oddrow', background='#2a2d2e')
