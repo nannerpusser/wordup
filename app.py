@@ -3,6 +3,7 @@ import os
 import webbrowser
 from tkinter import ttk
 import customtkinter as ctk
+from PIL import Image
 import threading
 import re
 from CTkMessagebox import CTkMessagebox
@@ -24,7 +25,7 @@ class TrieNode:
         self.children = {}
         self.is_end = False
 
-class Trie:
+class Trie:         #mostly boilerplate Trie for iterative dfs
     def __contains__(self, word):
         return self.search(word)
     
@@ -55,6 +56,26 @@ class Trie:
             node = node.children[char]
         return True
 
+class TopWindow(ctk.CTkToplevel):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.geometry(CenterWindowToDisplay(self, 300, 400, self._get_window_scaling()))
+        self.resizable(False, False)
+        self.minsize(200, 400)
+        self.title("Help")
+
+
+        self.help_text = ctk.CTkTextbox(
+            self,
+            width=300,
+            height=400,
+            border_width=1,
+            corner_radius=3,
+            bg_color="#2b2b2b",
+        )
+        self.help_text.insert(index="end", text="Enter a 4x4 board left to right, top to bottom." + "\n" + "Enter board exactly as shown on tiles. No spaces." + "\n" + "Example: \n" + "\n" + f"[EN-] [A] [P] [T]" + "\n" + f"[T] [R] [O] [-LY]" + "\n" + f"[W] [Y] [MO] [S]" + "\n" + f"[T] [C/U] [R] [T]" + "\n")
+        self.help_text.configure(state="disabled")
+        self.help_text.pack()
 class WordamentSolver:
     def __init__(self):
         self.trie = Trie()
@@ -66,20 +87,20 @@ class WordamentSolver:
             'S': 1, 'T': 1, 'U': 1, 'V': 4, 'W': 4, 'X': 8, 'Y': 4, 'Z': 10
         }
 # Problem here is tile value isn't a constant and there are various multipliers. The multipliers might be constants for word length, but conditionals apply in outlier circumstances
-# These values are as close as it's gonna get unless I actually implement OCR that isn't drunk and take real-time values off tiles 
+# These values are as close as it's gonna get unless I actually implement OCR for real-time tile value per game
     def load_dictionary(self, file_path):
         with open(file_path, 'r') as f:
             for word in f:
                 self.trie.insert(word.strip())
 
-       
+    
 
 
     def set_board(self, board, special_tiles):
         self.board = [[tile.upper() for tile in row] for row in board]
         for (i, j), tile in special_tiles.items():
             if '/' in tile:
-                self.board[i][j] = tile.split('/')  # Store as a list of possible characters
+                self.board[i][j] = tile.split('/')  # Store as a list of possible characters, fix for infinite recursion hangs
             else:
                 self.board[i][j] = tile
 
@@ -126,8 +147,8 @@ class WordamentSolver:
                         if (ni, nj) not in visited:
                             stack.append((ni, nj, new_word, visited))
 
-    def get_neighbors(self, i, j):
-        neighbors = []
+    def get_neighbors(self, i, j):     # preventing infinite recursion errors 
+        neighbors = []   
         for di in [-1, 0, 1]:
             for dj in [-1, 0, 1]:
                 ni, nj = i + di, j + dj
@@ -143,6 +164,7 @@ class WordamentGUI:
         self.root.geometry(CenterWindowToDisplay(self.root, 630, 700, 1.0))
         load_font = os.path.join(assets, "Segoe-Sans-Text.ttf")
         self.entry_font = (ctk.CTkFont(family=load_font, size=26))
+        
         ctk.set_appearance_mode("dark")
         ctk.set_default_color_theme("dark-blue")
 
@@ -163,6 +185,15 @@ class WordamentGUI:
         self.words = []
         self.create_widgets()
 
+        self.topwindow = None
+    def show_help(self):
+        if self.topwindow is None or not self.topwindow.winfo_exists():
+            self.topwindow = TopWindow(self.root)
+        else:
+            self.topwindow.focus()
+            self.solve_button.configure(state="normal", text="Solve")
+
+
     def create_widgets(self):
         self.root.grid_columnconfigure(0, weight=1)
         self.root.grid_rowconfigure(0, weight=1)
@@ -180,7 +211,7 @@ class WordamentGUI:
         for i in range(4):
             row = []
             for j in range(4):
-                entry = ctk.CTkEntry(board_frame, width=80, height=80, justify='center', font=self.entry_font, textvariable=self.entry_vars[i][j])
+                entry = ctk.CTkEntry(board_frame, width=82, height=80, justify='center', font=self.entry_font, textvariable=self.entry_vars[i][j], corner_radius=2)
                 entry.grid(row=i, column=j, padx=5, pady=5)
                 entry.grid_rowconfigure((0, 1, 2, 3), weight=1)
                 entry.grid_columnconfigure((0, 1, 2, 3), weight=1)
@@ -193,18 +224,21 @@ class WordamentGUI:
         button_frame = ctk.CTkFrame(self.root, bg_color="transparent", fg_color="transparent")
         button_frame.grid(row=0, column=1, padx=5, pady=5, sticky="nsew")
 
+        self.help_img = ctk.CTkImage(light_image=Image.open(os.path.join(assets, "Info.png")), dark_image=Image.open(os.path.join(assets, "Info.png")), size=(20, 20))
+        self.help_button = ctk.CTkButton(button_frame, text="", image=self.help_img, compound="left", command=self.show_help, bg_color="transparent", fg_color="transparent", hover=False, anchor="center")
+        self.help_button.place(relx=0.5, rely=0.125, anchor="center")
 
-        self.solve_button = ctk.CTkButton(button_frame, text="Solve", command=self.solve, text_color="#000000", fg_color="#00a500", hover_color="#00c100")
+        self.solve_image = ctk.CTkImage(light_image=Image.open(os.path.join(assets, "solve.png")), dark_image=Image.open(os.path.join(assets, "solve.png")), size=(18, 18))
+        self.solve_button = ctk.CTkButton(button_frame, text="Solve", command=self.solve, fg_color="#33b40b", text_color="#ffffff", image=self.solve_image, compound="left", hover_color="#3ace0d", corner_radius=3, font=(self.entry_font, 18), anchor="center")
         self.solve_button.place(relx=0.5, rely=0.3, anchor="center")
-        #self.solve_button.pack(pady=5, padx=5, anchor="center", expand=True)
 
-        self.clear_button = ctk.CTkButton(button_frame, text="Clear", command=self.clear_board, text_color="#000000", fg_color="#c6b040", hover_color="#dfc649")
+        self.clear_img = ctk.CTkImage(light_image=Image.open(os.path.join(assets, "clearimg.png")), dark_image=Image.open(os.path.join(assets, "clearimg.png")), size=(18, 18))
+        self.clear_button = ctk.CTkButton(button_frame, text="Clear", command=self.clear_board, fg_color="#4385c8", hover_color="#4e9deb", image=self.clear_img, compound="left", corner_radius=3, font=(self.entry_font, 18), anchor="center")
         self.clear_button.place(relx=0.5, rely=0.5, anchor="center")
-        #self.clear_button.pack(pady=5, padx=5, anchor="center", expand=True)
 
-        self.quit_button = ctk.CTkButton(button_frame, text="Quit", command=self.quit_app, text_color="#000000", fg_color="#a80000", hover_color="#c30000")
+        self.quit_img = ctk.CTkImage(light_image=Image.open(os.path.join(assets, "quitimg.png")), dark_image=Image.open(os.path.join(assets, "quitimg.png")), size=(18, 18))
+        self.quit_button = ctk.CTkButton(button_frame, text="Quit", command=self.quit_app, fg_color="#4385c8", hover_color="#4e9deb", image=self.quit_img, compound="left", corner_radius=3, font=(self.entry_font, 18), anchor="center")
         self.quit_button.place(relx=0.5, rely=0.7, anchor="center")
-        #self.quit_button.pack(pady=5, padx=5, anchor="center", expand=True)
 
         # Treeview frame (bottom, spanning width)
         tree_frame = ctk.CTkFrame(self.root)
@@ -215,38 +249,42 @@ class WordamentGUI:
         self.tree.heading('Word', text='Word', command=lambda: self.treeview_sort_column('Word', False))
         self.tree.heading('Length', text='Length', command=lambda: self.treeview_sort_column('Length', False))
         self.tree.heading('Value', text='Value', command=lambda: self.treeview_sort_column('Value', False))
-        self.tree.column('Word', width=200)
+        self.tree.column('Word', width=140)
         self.tree.column('Length', width=80, anchor='center')
         self.tree.column('Value', width=80, anchor='center')
         self.tree.pack(side=tk.LEFT, expand=True, fill="both")
 
         # Scrollbar for Treeview, had trouble keeping it slim and padded on y axis
-        scrollbar = ctk.CTkScrollbar(tree_frame, orientation="vertical", command=self.tree.yview, border_spacing=2, width=5)
+        scrollbar = ctk.CTkScrollbar(tree_frame, orientation="vertical", command=self.tree.yview, border_spacing=1, width=5)
         self.tree.configure(yscroll=scrollbar.set)
-        scrollbar.pack(side="right", fill="y", ipadx=4)
+        scrollbar.pack(side="right", fill="y", ipadx=2)
 
         # Configure tag for alternating row colors
         self.tree.tag_configure('oddrow', background='#2a2d2e')
         self.tree.tag_configure('evenrow', background='#212325')
-
+    
     def validate_input(self, row, col):
         value = self.entry_vars[row][col].get().upper()
         
-        # This needs work for sure
-        filtered_value = "".join(char for char in value if not char.isdigit())[:4].upper()
+        valid_chars = set("ABCDEFGHIJKLMNOPQRSTUVWXYZ-/")
+        filtered_value = "".join(char for char in value if char in valid_chars)[:4].upper()
+        #filtered_value = "".join(char for char in value if not char.isdigit())[:4].upper()
         
         # Ditto
         if len(filtered_value) > 1:
-            if filtered_value.startswith('-') or filtered_value.endswith('-'):
-                filtered_value = filtered_value[:4]  # Allow up to 4 characters for prefix/suffix tiles
-            elif '/' in filtered_value:
-                filtered_value = filtered_value[:3]  # Limit to 3 characters for tiles with '/', But filter needs to not allow / at start or end. See actual implementation below
-            elif len(filtered_value) == 4 and filtered_value.endswith('-'):
-                filtered_value = filtered_value[:3]  # Limit to 3 characters + special for tiles like MIS-
-            elif len(filtered_value) == 2:    
+         # Allow up to 4 characters for dick tile
+            if  len(filtered_value) > 3 and filtered_value.endswith('-'):
+                filtered_value = filtered_value[:4] 
+            elif len(filtered_value) > 2 and '-' in filtered_value[1:-1]:
+                filtered_value = filtered_value.replace('-', '')
+            elif len(filtered_value) > 2 and filtered_value.startswith('/'):
+                filtered_value = filtered_value[1:]
+            elif len(filtered_value) > 2 and filtered_value.endswith('/'):
+                filtered_value = filtered_value[:-1]
+            elif len(filtered_value) == 2 and '/' not in filtered_value and '-' not in filtered_value:
                 filtered_value = filtered_value[:2]
         else:
-            filtered_value = filtered_value[:1]  
+            filtered_value = filtered_value[:1]
         
         # Update the entry
         self.entries[row][col].delete(0, tk.END)
@@ -327,6 +365,7 @@ class WordamentGUI:
         # Reverse sort next time
         self.tree.heading(col, command=lambda: self.treeview_sort_column(col, not reverse))
     def run(self):
+        self.clear_board()
         self.root.mainloop()
 
 if __name__ == "__main__":
