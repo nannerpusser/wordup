@@ -274,15 +274,18 @@ class WordamentGUI:
         if len(filtered_value) > 1:
          # Allow up to 4 characters for dick tile
             if  len(filtered_value) > 3 and filtered_value.endswith('-'):
-                filtered_value = filtered_value[:4] 
+                filtered_value = filtered_value[:4]
+            elif len(filtered_value) > 3 and filtered_value.startswith('-'):
+                filtered_value = filtered_value[:3]
             elif len(filtered_value) > 2 and '-' in filtered_value[1:-1]:
                 filtered_value = filtered_value.replace('-', '')
-            elif len(filtered_value) > 2 and filtered_value.startswith('/'):
-                filtered_value = filtered_value[1:]
-            elif len(filtered_value) > 2 and filtered_value.endswith('/'):
-                filtered_value = filtered_value[:-1]
-            elif len(filtered_value) == 2 and '/' not in filtered_value and '-' not in filtered_value:
-                filtered_value = filtered_value[:2]
+            elif len(filtered_value) > 2 and '/' in filtered_value[-1:]:
+                filtered_value = filtered_value[:1]
+            elif len(filtered_value) > 2 and '/' in filtered_value[:1]:
+                filtered_value = filtered_value[-1:]
+            elif len(filtered_value) > 2 and '/' in filtered_value[-1:1]:
+                filtered_value = filtered_value[:1]
+
         else:
             filtered_value = filtered_value[:1]
         
