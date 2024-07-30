@@ -267,8 +267,7 @@ class WordamentGUI:
         value = self.entry_vars[row][col].get().upper()
         
         valid_chars = set("ABCDEFGHIJKLMNOPQRSTUVWXYZ-/")
-        filtered_value = "".join(char for char in value if char in valid_chars)[:4].upper()
-        #filtered_value = "".join(char for char in value if not char.isdigit())[:4].upper()
+        filtered_value = "".join(char for char in value if char in valid_chars)[:4].upper() # jank, has to work
         
         # Ditto
         if len(filtered_value) > 1:
@@ -280,9 +279,9 @@ class WordamentGUI:
             elif len(filtered_value) > 2 and '-' in filtered_value[1:-1]:
                 filtered_value = filtered_value.replace('-', '')
             elif len(filtered_value) > 2 and '/' in filtered_value[-1:]:
-                filtered_value = filtered_value[:1]
+                filtered_value = filtered_value[:-1]
             elif len(filtered_value) > 2 and '/' in filtered_value[:1]:
-                filtered_value = filtered_value[-1:]
+                filtered_value = filtered_value[1:]
             elif len(filtered_value) > 2 and '/' in filtered_value[-1:1]:
                 filtered_value = filtered_value[:1]
 
