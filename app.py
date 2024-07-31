@@ -224,21 +224,21 @@ class WordamentGUI:
         button_frame = ctk.CTkFrame(self.root, bg_color="transparent", fg_color="transparent")
         button_frame.grid(row=0, column=1, padx=5, pady=5, sticky="nsew")
 
-        self.help_img = ctk.CTkImage(light_image=Image.open(os.path.join(assets, "Info.png")), dark_image=Image.open(os.path.join(assets, "Info.png")), size=(20, 20))
-        self.help_button = ctk.CTkButton(button_frame, text="", image=self.help_img, compound="left", command=self.show_help, bg_color="transparent", fg_color="transparent", hover=False, anchor="center")
-        self.help_button.place(relx=0.5, rely=0.125, anchor="center")
+        self.help_img = ctk.CTkImage(light_image=Image.open(os.path.join(assets, "BlueI.png")), dark_image=Image.open(os.path.join(assets, "BlueI.png")), size=(22, 22))
+        self.help_button = ctk.CTkButton(button_frame, text="Info", image=self.help_img, compound="left", command=self.show_help, bg_color="transparent", fg_color="transparent", hover=True, hover_color="#2d2d2d", corner_radius=7, font=(self.entry_font, 16, "bold"), anchor="center")
+        self.help_button.place(relx=0.5, rely=0.125, anchor="n")
 
-        self.solve_image = ctk.CTkImage(light_image=Image.open(os.path.join(assets, "solve.png")), dark_image=Image.open(os.path.join(assets, "solve.png")), size=(18, 18))
-        self.solve_button = ctk.CTkButton(button_frame, text="Solve", command=self.solve, fg_color="#33b40b", text_color="#ffffff", image=self.solve_image, compound="left", hover_color="#3ace0d", corner_radius=3, font=(self.entry_font, 18), anchor="center")
-        self.solve_button.place(relx=0.5, rely=0.3, anchor="center")
+        self.solve_image = ctk.CTkImage(light_image=Image.open(os.path.join(assets, "BlueS.png")), dark_image=Image.open(os.path.join(assets, "BlueS.png")), size=(22, 22))
+        self.solve_button = ctk.CTkButton(button_frame, text="Solve", command=self.solve, fg_color="#33b40b", text_color="#ffffff", image=self.solve_image, compound="left", hover_color="#3ace0d", corner_radius=5, font=(self.entry_font, 20, "bold"), anchor="center")
+        self.solve_button.place(relx=0.5, rely=0.4, anchor="s")
 
-        self.clear_img = ctk.CTkImage(light_image=Image.open(os.path.join(assets, "clearimg.png")), dark_image=Image.open(os.path.join(assets, "clearimg.png")), size=(18, 18))
-        self.clear_button = ctk.CTkButton(button_frame, text="Clear", command=self.clear_board, fg_color="#4385c8", hover_color="#4e9deb", image=self.clear_img, compound="left", corner_radius=3, font=(self.entry_font, 18), anchor="center")
-        self.clear_button.place(relx=0.5, rely=0.5, anchor="center")
+        self.clear_img = ctk.CTkImage(light_image=Image.open(os.path.join(assets, "BlueC.png")), dark_image=Image.open(os.path.join(assets, "BlueC.png")), size=(22, 22))
+        self.clear_button = ctk.CTkButton(button_frame, text="Clear", command=self.clear_board, fg_color="#4385c8", hover_color="#4e9deb", image=self.clear_img, compound="left", corner_radius=5, font=(self.entry_font, 20, "bold"), anchor="center")
+        self.clear_button.place(relx=0.5, rely=0.6, anchor="center")
 
-        self.quit_img = ctk.CTkImage(light_image=Image.open(os.path.join(assets, "quitimg.png")), dark_image=Image.open(os.path.join(assets, "quitimg.png")), size=(18, 18))
-        self.quit_button = ctk.CTkButton(button_frame, text="Quit", command=self.quit_app, fg_color="#4385c8", hover_color="#4e9deb", image=self.quit_img, compound="left", corner_radius=3, font=(self.entry_font, 18), anchor="center")
-        self.quit_button.place(relx=0.5, rely=0.7, anchor="center")
+        self.quit_img = ctk.CTkImage(light_image=Image.open(os.path.join(assets, "RedQ.png")), dark_image=Image.open(os.path.join(assets, "RedQ.png")), size=(22, 22))
+        self.quit_button = ctk.CTkButton(button_frame, text=" Quit", command=self.quit_app, fg_color="#4385c8", hover_color="#4e9deb", image=self.quit_img, compound="left", corner_radius=5, font=(self.entry_font, 20, "bold"), anchor="center")
+        self.quit_button.place(relx=0.5, rely=0.8, anchor="s")
 
         # Treeview frame (bottom, spanning width)
         tree_frame = ctk.CTkFrame(self.root)
@@ -279,12 +279,17 @@ class WordamentGUI:
             elif len(filtered_value) > 2 and '-' in filtered_value[1:-1]:
                 filtered_value = filtered_value.replace('-', '')
             elif len(filtered_value) > 2 and '/' in filtered_value[-1:]:
-                filtered_value = filtered_value[:-1]
+                filtered_value = filtered_value.replace('/', '')
             elif len(filtered_value) > 2 and '/' in filtered_value[:1]:
-                filtered_value = filtered_value[1:]
+                filtered_value = filtered_value.replace('/', '')
             elif len(filtered_value) > 2 and '/' in filtered_value[-1:1]:
                 filtered_value = filtered_value[:1]
-
+            elif filtered_value == '//':
+                filtered_value = ''
+            elif filtered_value == '--':
+                filtered_value = ''
+            elif filtered_value == re.match('[A-Z]{2,3}', filtered_value) and filtered_value.endswith('/'):
+                filtered_value = filtered_value[:-1]
         else:
             filtered_value = filtered_value[:1]
         
