@@ -59,7 +59,7 @@ class Trie:         #mostly boilerplate Trie for iterative dfs
 class TopWindow(ctk.CTkToplevel):
     def __init__(self, parent):
         super().__init__(parent)
-        self.geometry(CenterWindowToDisplay(self, 300, 400, self._get_window_scaling()))
+        self.geometry(CenterWindowToDisplay(self, 300, 400, 1.0)
         self.resizable(False, False)
         self.minsize(200, 400)
         self.title("Help")
