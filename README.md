@@ -1,5 +1,8 @@
 *Update: Completely reworked app and added word value as filterable treeview display. Of course tile values are not constants all the time and although there are base values, conditions and multipliers apply on a per-game basis. So value is approximate until I actually implement OCR for input automation and can pull values off each tile in real-time. Use app.py for now even if it isn't very pretty yet. It works better and I am updating the UI soon.*
 
+*Also update: Have compiled this into a single executable, but because PyInstaller/AutoPy2Exe are the way they are and compression isn't an option, the filesize is ~30MB. Above allowable GitHub upload size for a single file, so it's on a public Drive until I figure out what I wanna do to shrink it or whatever. If you really want it, msg me and I'll provide the link.*
+
+
 ## Wordament Solver App with GUI
 Description:
 
