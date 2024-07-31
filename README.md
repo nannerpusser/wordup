@@ -19,8 +19,8 @@ Features:
 Installation:
 
 - Clone the repository
-- Install the required dependencies. Pipfile, since I know you use pipenv like all God-fearing Python men do. 
-- ``pip install customtkinter`` etc. 
+- Install the required dependencies. Pipfile, since I know you use pipenv like all God-fearing Python men do. 👼
+- ``pip install customtkinter`` mainly.
 - Run the app.py file and please don't laugh.
 
 
