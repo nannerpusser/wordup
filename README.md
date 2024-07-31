@@ -3,6 +3,8 @@
 *Also update: Have compiled this into a single executable, but because PyInstaller/AutoPy2Exe are the way they are and compression isn't an option, the filesize is ~30MB. Above allowable GitHub upload size for a single file, so it's on a public Drive until I figure out what I wanna do to shrink it or whatever. If you really want it, msg me and I'll provide the link.*
 
 
+![Don't sue me](/assets/e5-1280x720.jpeg)
+
 ## Wordament Solver App with GUI
 Description:
 
