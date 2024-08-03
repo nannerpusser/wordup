@@ -1,6 +1,5 @@
 import tkinter as tk
 import os
-import webbrowser
 from tkinter import ttk
 import customtkinter as ctk
 from PIL import Image
