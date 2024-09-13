@@ -1,0 +1,15 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+easyocr = "*"
+pywinstyles = "*"
+opencv-contrib-python = "*"
+customtkinter = "*"
+pillow = "*"
+ctkmessagebox = "*"
+
+[dev-packages]
+ipykernel = "*"
