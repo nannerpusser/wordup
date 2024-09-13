@@ -201,19 +201,15 @@ class WordamentGUI(ctk.CTk):
 
 
 
-        # self.help_img = ctk.CTkImage(light_image=Image.open(os.path.join(ASSETS, "BlueI.png")), dark_image=Image.open(os.path.join(ASSETS, "BlueI.png")), size=(22, 22))
         self.ocr_button = ctk.CTkButton(button_frame, text="OCR", command=self.open_toplevel, fg_color="#3f3f3f", hover=True, hover_color="#121213", border_width=1, text_color="#ffffff", corner_radius=3, font=(self.entry_font, 20, "bold"), width=130, height=50)
         self.ocr_button.grid(row=0, column=1, padx=5, pady=5, sticky="nsew")
 
-        #self.solve_image = ctk.CTkImage(light_image=Image.open(os.path.join(ASSETS, "BlueS.png")), dark_image=Image.open(os.path.join(ASSETS, "BlueS.png")), size=(22, 22))
         self.solve_button = ctk.CTkButton(button_frame, text="Solve", command=self.solve, fg_color="#33b40b", text_color="#ffffff", border_width=1, hover_color="#3ace0d", corner_radius=3, font=(self.entry_font, 20, "bold"), width=130, height=50)
         self.solve_button.grid(row=1, column=1, padx=5, pady=5, sticky="nsew")
 
-        # self.clear_img = ctk.CTkImage(light_image=Image.open(os.path.join(ASSETS, "BlueC.png")), dark_image=Image.open(os.path.join(ASSETS, "BlueC.png")), size=(22, 22))
         self.clear_button = ctk.CTkButton(button_frame, text="Clear", command=self.clear_board, fg_color="#8bc1c9", hover_color="#66a4e2", text_color="#ffffff", border_width=1, corner_radius=3, font=(self.entry_font, 20, "bold"), width=130, height=50)
         self.clear_button.grid(row=2, column=1, padx=5, pady=5, sticky="nsew")
 
-        # self.quit_img = ctk.CTkImage(light_image=Image.open(os.path.join(ASSETS, "RedQ.png")), dark_image=Image.open(os.path.join(ASSETS, "RedQ.png")), size=(22, 22))
         self.quit_button = ctk.CTkButton(button_frame, text="Quit", command=self.quit, fg_color="#c8434e", hover_color="#b91a3d", corner_radius=3, text_color="#ffffff", border_width=1, font=(self.entry_font, 20, "bold"), width=130, height=50)
         self.quit_button.grid(row=3, column=1, padx=5, pady=5, sticky="nsew")
 
@@ -252,7 +248,6 @@ class WordamentGUI(ctk.CTk):
         style.map('Treeview', foreground=[('selected', self.foreground_color)])
         style.map('Treeview.Heading', background=[('active', "#81a5cc")])
 
-        #tree_frame.tk.call("set_theme", "dark")
         tree_frame.grid(row=1, column=0, columnspan=2, padx=1, pady=1, ipadx=2, ipady=2, sticky="nsew")
         tree_frame.grid_rowconfigure((0, 1), weight=1, uniform="both")
         tree_frame.grid_columnconfigure((0, 1, 2), weight=1)
@@ -313,7 +308,7 @@ class WordamentGUI(ctk.CTk):
         self.entries[row][col].delete(0, tk.END)
         self.entries[row][col].insert(0, filtered_value)
 
-    def error_message(self):    # Great utility for CTK
+    def error_message(self):    
         CTkMessagebox.CTkMessagebox(
             title="Error",
             fade_in_duration=0.1,
@@ -397,7 +392,7 @@ class WordamentGUI(ctk.CTk):
         size = (w, h)
 
         new_frameimage = self.frameimage.resize(size)
-
+        #This whole thing could go, but I like the utility as a snippet 
 
         img_id = stage.itemconfig(img_id, image=self.framephoto)
         stage.framephoto = self.framephoto
@@ -415,7 +410,6 @@ class WordamentSolver:
             'S': 1, 'T': 1, 'U': 1, 'V': 4, 'W': 4, 'X': 8, 'Y': 4, 'Z': 10
         }
 # Problem here is tile value isn't a constant and there are various multipliers. The multipliers might be constants for word length, but conditionals apply in outlier circumstances
-# These values are as close as it's gonna get unless I actually implement OCR for real-time tile value per game
     def load_dictionary(self, file_path):
         with open(file_path, 'r') as f:
             for word in f:
