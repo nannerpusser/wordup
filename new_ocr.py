@@ -110,10 +110,6 @@ class OCR:
         print(f"OCR Extracted Data: {extracted_data}")
         return extracted_data
 
-        #extracted_data = [text[1] for text in result]
-
-        #print(f"OCR Extracted Data: {extracted_data}")
-        #return extracted_data
     
 
 class WordamentOCR:
@@ -136,7 +132,6 @@ class WordamentOCR:
             print(f"Error during template matching: {e}")
             return []
 
-        # Step 3: Perform OCR on the cropped region
         
         return self.ocr.run_ocr(cropped_region)
 
