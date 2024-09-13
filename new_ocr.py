@@ -45,7 +45,7 @@ class GetScreenshot:
             CTkMessagebox.CTkMessagebox(
                 title="Wordament window not found!",
                 message=f"Open Wordament, start a game, and try again.",
-                icon="error",
+                icon="warning",
                 font=(self.msg_font_load, 14),
                 fade_in_duration=0.1,
                 justify="center",
