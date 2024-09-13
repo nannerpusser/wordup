@@ -1,7 +1,11 @@
 Repo reupload: Completely overhauled app to the point it no longer resembles original version. This one has OCR and auto-fill implemented, but EasyOCR has a lot of trouble with certain letters in this font. It doesn't even detect 'V', it will read '12' as 'IZ' and likes to mistake 'I' for 'T'. If you use this, be aware it's probably faster to manually insert the letters and hit Solve than it is to run the OCR and have it insert and then make any corrections. OCR itself is optional, but the first time you open the OCR window it is going to instantiate EasyOCR, which may take 1-2 seconds. Check output to follow along.
 
 
+<<<<<<< HEAD
 ![Don't sue me](/assets/wm2.png)
+=======
+![Don't sue me](/assets/wm.png)
+>>>>>>> 7b097756c74d3d907448436267766bd3364dc806
 
 ## Wordament Solver App with GUI
 Description:
