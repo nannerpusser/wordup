@@ -58,12 +58,15 @@ class Trie:         #mostly boilerplate Trie for iterative dfs
     
 class ToplevelWindow(ctk.CTkToplevel):
     def __init__(self, *args, **kwargs):
+        
         super().__init__(*args, **kwargs)
         load_font = os.path.join(ASSETS, "Segoe-Sans-Text.ttf")
         self.geometry("400x300")
+        self.title("Wordup: OCR")
+        self.cleanup()
 
         self.label = ctk.CTkLabel(self, text="Please read notes before attempting OCR", font=(ctk.CTkFont(family=load_font, size=18)))
-        self.label.pack(padx=5, pady=7)
+        self.label.pack(padx=5, pady=10)
 
         self.go_button = ctk.CTkButton(self, width=100, height=30, text="Get Letters", command=self.fill_entries_with_ocr, font=(ctk.CTkFont(family=load_font, size=18)))
         self.go_button.pack(padx=5, pady=10)
@@ -88,8 +91,15 @@ class ToplevelWindow(ctk.CTkToplevel):
     def withdraw_top(self):
         app.deiconify()
         self.destroy()
-    
 
+    
+    def cleanup(self):
+        try:
+            os.remove(ASSETS + os.sep + "ocr" + os.sep + "cropped_region.png")
+            os.remove(ASSETS + os.sep + "ocr" + os.sep + "scrot.png")
+
+        except:
+            pass
 class WordamentGUI(ctk.CTk):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -115,7 +125,7 @@ class WordamentGUI(ctk.CTk):
         self.stage.grid_columnconfigure((0, 1, 2), weight=2)
         self.stage.grid_rowconfigure((0, 1, 2), weight=2)
 
-        frameimage = Image.open(ASSETS + os.sep + "wm.png")  # keep original image
+        frameimage = Image.open(ASSETS + os.sep + "wm.png") 
         self.framephoto = ImageTk.PhotoImage(frameimage)
         self.stage.framephoto = self.framephoto
         self.img_id = self.stage.create_image(0, 0, image=self.framephoto, anchor='nw')
@@ -127,7 +137,7 @@ class WordamentGUI(ctk.CTk):
 
         self.toplevel_window = None
     
-
+    
 
     def open_toplevel(self):
         if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
@@ -164,6 +174,8 @@ class WordamentGUI(ctk.CTk):
 
         # Reverse sort next time
         self.tree.heading(col, command=lambda: self.treeview_sort_column(col, not reverse))
+
+
     def run(self):
         self.create_widgets()
         self.clear_board()
@@ -197,7 +209,7 @@ class WordamentGUI(ctk.CTk):
         button_frame.grid(row=0, column=1, padx=6, pady=6, ipadx=5, ipady=5, sticky="nsew")
         button_frame.grid_rowconfigure((0, 1, 2, 3), weight=1)
         button_frame.grid_columnconfigure((0, 1, 2), weight=1)
-        pywinstyles.set_opacity(widget=button_frame, color="black", value=0.95)
+        pywinstyles.set_opacity(widget=button_frame, color="black", value=1.0)
 
 
 
@@ -222,11 +234,11 @@ class WordamentGUI(ctk.CTk):
         self.background_color = "#4e4e4e"
         self.foreground_color = "#efefef"
 
-        self.tree = ttk.Treeview(tree_frame, show="tree", selectmode="browse", padding=(2, 2, 2, 2))
+        self.tree = ttk.Treeview(tree_frame, show="tree", selectmode="browse", padding=(1, 1, 1, 1))
         pywinstyles.set_opacity(widget=tree_frame, color="black", value=1.0)      # Treeview
         
         style = ttk.Style()
-        style.theme_use('clam')
+        style.theme_use('alt')
                 
         style.configure('Treeview',
             background=self.background_color,
@@ -248,7 +260,7 @@ class WordamentGUI(ctk.CTk):
         style.map('Treeview', foreground=[('selected', self.foreground_color)])
         style.map('Treeview.Heading', background=[('active', "#81a5cc")])
 
-        tree_frame.grid(row=1, column=0, columnspan=2, padx=1, pady=1, ipadx=2, ipady=2, sticky="nsew")
+        tree_frame.grid(row=1, column=0, columnspan=2, padx=1, pady=1, ipadx=1, ipady=1, sticky="nsew")
         tree_frame.grid_rowconfigure((0, 1), weight=1, uniform="both")
         tree_frame.grid_columnconfigure((0, 1, 2), weight=1)
 
@@ -259,13 +271,13 @@ class WordamentGUI(ctk.CTk):
         self.tree.column('Word', width=160, anchor='w', stretch=True)
         self.tree.column('Length', width=110, anchor='e', stretch=False)
         self.tree.column('Value', width=110, anchor='e', stretch=False)
-        self.tree.pack(side=tk.LEFT, expand=True, fill="both", padx=5, pady=5)
+        self.tree.pack(side=tk.LEFT, expand=True, fill="both", padx=3, pady=3)
 
         # Scrollbar for Treeview, had trouble keeping it slim and padded on y axis
-        self.scrollbar = ctk.CTkScrollbar(tree_frame, orientation="vertical", command=self.tree.yview, border_spacing=5)
+        self.scrollbar = ctk.CTkScrollbar(tree_frame, orientation="vertical", command=self.tree.yview, border_spacing=1)
         self.scrollbar.configure(bg_color="black")
         self.tree.configure(yscroll=self.scrollbar.set)
-        self.scrollbar.pack(side="right", fill="y", ipadx=5, pady=2, padx=2, ipady=5)
+        self.scrollbar.pack(side="right", fill="y", ipadx=2, pady=2, padx=2, ipady=2)
         pywinstyles.set_opacity(widget=self.scrollbar, color="black", value=1.0)
 
         # Configure tag for alternating row colors

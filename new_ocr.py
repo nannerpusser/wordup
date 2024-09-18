@@ -19,11 +19,15 @@ class GetScreenshot:
         self.msg_font_load = ctk.CTkFont(family=self.msg_font, size=22)
         self.scrot_path = scrot_path
         self.template_path = template_path
+
     def take_screenshot(self):
         """Capture screenshot from the Wordament window."""
         try:
             app = Application().connect(title_re=".*Ultimate Word Games.*")
-            if app is None or not app.window(title_re=".*Ultimate Word Games.*").exists():
+            if (
+                app is None
+                or not app.window(title_re=".*Ultimate Word Games.*").exists()
+            ):
                 print("Wordament window not found")
                 return None
 
@@ -54,7 +58,7 @@ class GetScreenshot:
             return None
 
     def template_matching_crop(self):
-        """Perform template matching and crop the desired region."""
+
         if not self.scrot_path or not os.path.isfile(self.scrot_path):
             raise ValueError("Invalid screenshot path")
 
@@ -74,12 +78,16 @@ class GetScreenshot:
         h, w = template.shape
         bottom_right = (top_left[0] + w, top_left[1] + h)
 
-        cropped_region = img[top_left[1]:bottom_right[1], top_left[0]:bottom_right[0]]
+        cropped_region = img[
+            top_left[1] : bottom_right[1], top_left[0] : bottom_right[0]
+        ]
 
-        if not os.path.exists(assets + os.sep + 'ocr'):
+        if not os.path.exists(assets + os.sep + "ocr"):
             raise ValueError("Assets directory does not exist")
         cropped_region = cv.cvtColor(cropped_region, cv.COLOR_BGR2GRAY)
-        cropped_path = os.path.join(assets + os.sep + 'ocr' + os.sep + 'cropped_region.png')
+        cropped_path = os.path.join(
+            assets + os.sep + "ocr" + os.sep + "cropped_region.png"
+        )
         cv.imwrite(cropped_path, cropped_region)
 
         return cropped_region, cropped_path
@@ -87,33 +95,36 @@ class GetScreenshot:
 
 class OCR:
     def __init__(self):
-        self.ocr = Reader(['en'], gpu=False)
+        self.ocr = Reader(["en"])
 
     def run_ocr(self, cropped_region):
-        """Run OCR on the cropped region and return detected text."""
         if cropped_region is None:
             raise ValueError("No cropped region provided for OCR")
 
         # OCR processing
-        result = self.ocr.readtext(cropped_region, allowlist="ABCDEFGHIJKLMNOPQRSTUVWXYZ-/", text_threshold=0.2, adjust_contrast=0.7, detail=1, add_margin=0.2, bbox_min_score=0.2)
+        result = self.ocr.readtext(
+            cropped_region,
+            allowlist="ABCDEFGHIJKLMNOPQRSTUVWXYZ-/",
+            text_threshold=0.35,
+            add_margin=0.1,
+            adjust_contrast=0.8,
+            detail=1,
+        )
         for text in result:
-            if text[1] == "IZ":
-                result.remove(text)
-            elif text[1] == "":
-                result.append((text[0], "//"))
+            if text == "":
+                text.append(" ")
 
         print(f"OCR Result: {result}")
 
-        
         extracted_data = [text[1] for text in result]
 
         print(f"OCR Extracted Data: {extracted_data}")
         return extracted_data
 
-    
 
 class WordamentOCR:
     """A high-level class to handle the entire OCR process."""
+
     def __init__(self):
         self.screenshot = GetScreenshot()
         self.ocr = OCR()
@@ -132,14 +143,15 @@ class WordamentOCR:
             print(f"Error during template matching: {e}")
             return []
 
-        
         return self.ocr.run_ocr(cropped_region)
+
 
 def main():
     wordament_ocr = WordamentOCR()
     ocr_results = wordament_ocr.run()
 
     return ocr_results
-        
+
+
 if __name__ == "__main__":
     main()
