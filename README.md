@@ -8,6 +8,7 @@ Repo reupload: Completely overhauled app to the point it no longer resembles ori
 
 ## Wordament Solver App with GUI
 Description:
+
 Most importantly: this is a personal project I've used to learn stuff and things. No one plays this dumb game anymore and I actually advise against playing the PC version because of forced ads. If I'm being forced to sit through trash ads, I may as well do it on mobile where it's marginally less offensive. 
 
 This Wordament Solver app allows users to input a 4x4 board of letters and find valid words from the board based on a provided dictionary. The dictionary is the standard OSPD Scrabble dictionary, commonly found as ``twl06.txt``. This means you will encounter invalid words at times since Wordament has an internal dictionary that is nearly identical, but not quite. If you can get Microsoft to share their dictionary, I thank you in advance.
