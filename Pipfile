@@ -10,6 +10,7 @@ opencv-contrib-python = "*"
 customtkinter = "*"
 pillow = "*"
 ctkmessagebox = "*"
+pywinauto = "*"
 
 [dev-packages]
 ipykernel = "*"

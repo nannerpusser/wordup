@@ -98,23 +98,13 @@ class OCR:
         self.ocr = Reader(["en"])
 
     def run_ocr(self, cropped_region):
-        if cropped_region is None:
-            raise ValueError("No cropped region provided for OCR")
-
-        # OCR processing
+                                                        # EasyOCR processing
         result = self.ocr.readtext(
             cropped_region,
             allowlist="ABCDEFGHIJKLMNOPQRSTUVWXYZ-/",
             text_threshold=0.35,
-            add_margin=0.1,
-            adjust_contrast=0.8,
             detail=1,
         )
-        for text in result:
-            if text == "":
-                text.append(" ")
-
-        print(f"OCR Result: {result}")
 
         extracted_data = [text[1] for text in result]
 
